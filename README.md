@@ -78,15 +78,15 @@ Before running the project, you need the following installed on your system:
 ## Ethical Considerations
 
 ### Respect for Website’s Terms of Service:
-We have reviewed **Chuffed.org**'s [robots.txt](https://chuffed.org/robots.txt) and ensured that our web scraping complies with their guidelines. The scraping is done responsibly with proper rate limiting to avoid overwhelming the server.
+I have reviewed **Chuffed.org**'s [robots.txt](https://chuffed.org/robots.txt) and ensured that my web scraping complies with their guidelines. The scraping is done responsibly with proper rate limiting to avoid overwhelming the server.
 
 ### Data Handling and Privacy:
 - The data collected from **Chuffed.org** and the **News API** is used solely for educational purposes and personal analysis.
-- We do not collect or share any personally identifiable information.
+- I did not collect or share any personally identifiable information.
 - No sensitive data is stored or misused, ensuring compliance with user privacy guidelines.
 
 ### Responsible API Use:
-- Our use of the **News API** follows the terms of service, and API calls are limited to prevent excessive usage or overloading the server.
+- My use of the **News API** follows the terms of service, and API calls are limited to prevent excessive usage or overloading the server.
 
 ---
 
@@ -94,4 +94,4 @@ We have reviewed **Chuffed.org**'s [robots.txt](https://chuffed.org/robots.txt) 
 
 For this project, **fuzzy matching** was implemented to compare similar topics between Chuffed.org campaigns and news articles. I used **ChatGPT** to learn how to effectively implement fuzzy matching with the **fuzzywuzzy** library because I wasn't able to get enough exact matches between the scraped data and the fetched data from the News API.
 
-The reason for using fuzzy matching is that the titles from Chuffed.org and the news articles tend to differ slightly, and exact matches between the two sources were rare. Without fuzzy matching, the combined dataset would have been too small to provide meaningful analysis.
+The reason for using fuzzy matching is that the titles from Chuffed.org and the news articles tend to differ a lot, and exact matches between the two sources were rare. Without fuzzy matching, the combined dataset would have been too small to provide meaningful analysis.
