@@ -1,7 +1,3 @@
-Here’s the **`README.md`** file for your current project based on the details you provided and the structure of your previous project:
-
----
-
 # Charity Campaigns and News Data Analysis
 
 ## Project Description
@@ -11,7 +7,7 @@ This project collects data on charity campaigns from **Chuffed.org** using **Sel
 To handle potential differences between campaign titles and news article titles, **fuzzy matching** is used to compare similar topics. This approach is necessary because the exact matches between titles from both sources are rare, making it difficult to find overlapping topics directly.
 
 ### Data Collected:
-- **Chuffed.org Campaigns**: The project scrapes campaign titles and URLs from the Chuffed.org website.
+- **Chuffed.org Campaigns**: The project scrapes campaign titles and URLs from the https://chuffed.org/discover website.
 - **News Articles**: The project fetches charity-related news articles from the News API, gathering the title, description, and publication date.
 
 ---
@@ -99,7 +95,3 @@ We have reviewed **Chuffed.org**'s [robots.txt](https://chuffed.org/robots.txt) 
 For this project, **fuzzy matching** was implemented to compare similar topics between Chuffed.org campaigns and news articles. I used **ChatGPT** to learn how to effectively implement fuzzy matching with the **fuzzywuzzy** library because I wasn't able to get enough exact matches between the scraped data and the fetched data from the News API.
 
 The reason for using fuzzy matching is that the titles from Chuffed.org and the news articles tend to differ slightly, and exact matches between the two sources were rare. Without fuzzy matching, the combined dataset would have been too small to provide meaningful analysis.
-
----
-
-Let me know if you need any more sections or further modifications!
