@@ -7,11 +7,10 @@ from selenium import webdriver
 import time
 from fuzzywuzzy import process
 
-# Load API key from .env file
 load_dotenv()
 api_key = os.getenv('NEWS_API_KEY')
 
-# Function to fetch news articles from News API
+#fetch news articles from News API
 def fetch_news(query, api_key):
     url = f'https://newsapi.org/v2/everything?q={query}&apiKey={api_key}'
     response = requests.get(url)
@@ -21,86 +20,72 @@ def fetch_news(query, api_key):
         print(f"Error: {response.status_code}")
         return []
 
-# Function to scrape Chuffed.org campaign data using Selenium
+#scrape Chuffed.org campaign data using Selenium
 def scrape_chuffed_with_selenium():
-    # Initialize Selenium WebDriver (ensure ChromeDriver or GeckoDriver is installed and added to PATH)
-    driver = webdriver.Chrome()  # or webdriver.Firefox() if using Firefox
-    
-    # URL of the Chuffed.org campaign page
+    driver = webdriver.Chrome()
     url = 'https://chuffed.org/discover'
-    
-    # Open the webpage using Selenium
     driver.get(url)
-    
-    # Allow some time for the page to load completely
-    time.sleep(5)  # You can adjust the sleep time as needed
-    
-    # Get the page source after JavaScript has loaded the content
+    time.sleep(5)
+    #page source after JavaScript has loaded the content
     html = driver.page_source
     
-    # Parse the page content with BeautifulSoup
+    #parse the page content with BeautifulSoup
     soup = BeautifulSoup(html, 'html.parser')
     
-    # Find all campaign elements (adjust based on the correct class name)
+    #find campaign elements
     campaigns = soup.find_all('a', class_='campaign-card__heading-link')
 
-    # Lists to store the scraped data
+    #store the scraped data
     campaign_titles = []
     campaign_urls = []
     
-    # Loop through each campaign and extract the title and URL
+    #extract the title and URL
     for campaign in campaigns:
-        # Extract campaign title (the text content of the <a> tag)
         title = campaign.text.strip()
         campaign_titles.append(title)
-        
-        # Extract campaign URL
+        #extract campaign URL
         link = campaign['href']
         campaign_urls.append(f"https://chuffed.org{link}")
     
-    # Create a DataFrame to store the scraped data
+    #create a DataFrame to store the scraped data
     df_chuffed = pd.DataFrame({
         'Campaign Title': campaign_titles,
         'Campaign URL': campaign_urls
     })
     
-    # Save the scraped data to a CSV file
+    #aave the scraped data to a CSV file
     df_chuffed.to_csv('chuffed_campaigns.csv', index=False)
     print("Chuffed campaigns saved to chuffed_campaigns.csv")
-    
-    # Close the Selenium WebDriver when done
     driver.quit()
     
     return df_chuffed
 
-# Scrape Chuffed campaign data using Selenium
+#scrape Chuffed campaign data using Selenium
 df_chuffed = scrape_chuffed_with_selenium()
 
-# Fetch news articles about charity fundraising
+#fetch news articles about charity fundraising
 query = 'charity fundraising'
 articles = fetch_news(query, api_key)
 
-# Check if there are articles returned
+#check if there are articles returned
 if articles:
-    # Convert articles to a pandas DataFrame
+    #convert articles to a pandas DataFrame
     df_news = pd.DataFrame(articles)
-    
-    # Select only title, description, and publishedAt columns for analysis
+    #data polishing
+    #select only title, description, and publishedAt columns for analysis
     df_clean = df_news[['title', 'description', 'publishedAt']].copy()
     
-    # Convert 'publishedAt' column to datetime format for better handling
+    #convert 'publishedAt' column to datetime format for better handling
     df_clean['publishedAt'] = pd.to_datetime(df_clean['publishedAt'])
-    
-    # Drop rows with missing values in the selected columns
     df_clean = df_clean.dropna(subset=['title', 'description', 'publishedAt'])
 
-    # Save the cleaned news data to a CSV file
+    #save the cleaned news data to a CSV file
     df_clean.to_csv('cleaned_charity_news.csv', index=False)
     print("Cleaned news articles saved to cleaned_charity_news.csv")
     
 else:
     print("No articles found.")
-    df_clean = pd.DataFrame()  # Return an empty DataFrame if no articles found
+    df_clean = pd.DataFrame()
 
 # Fuzzy Matching Function
 def fuzzy_merge(df1, df2, key1, key2, threshold=80, limit=2):
@@ -128,7 +113,7 @@ def fuzzy_merge(df1, df2, key1, key2, threshold=80, limit=2):
 if not df_chuffed.empty and not df_clean.empty:
     combined_df = fuzzy_merge(df_chuffed, df_clean, 'Campaign Title', 'title', threshold=80)
 
-    # Save the combined dataset to a new CSV file
+    #save the combined dataset to a new CSV file
     combined_df.to_csv('combined_data.csv', index=False)
     print("Combined dataset saved to combined_data.csv")
 else:
